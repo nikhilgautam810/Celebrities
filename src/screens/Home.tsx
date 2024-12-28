@@ -1,9 +1,13 @@
-import { SafeAreaView, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
+
+import { Image, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, View, Pressable, FlatList, Dimensions } from 'react-native'
 import React from 'react'
 import { colors } from '../components/constants'
 import VectorIcons from '../components/VectorIcons'
+import { CelebritiesData } from '../Data/CelebritiesData';
+import CelebritiesCard from '../components/CelebritiesCard';
+const { width, height } = Dimensions.get('window'); 
 
-type Props = {}
+
 
 const Home = (props: Props) => {
   return (
@@ -21,8 +25,13 @@ const Home = (props: Props) => {
         style={styles.searchTextInput}
         />
       </View>
+      <FlatList
+      data={CelebritiesData}
+      renderItem={({item})=><CelebritiesCard item={item} />}
+      keyExtractor={(item)=> item.id}
+      />
     </SafeAreaView>
-  )
+  )   
 }
 
 export default Home
@@ -49,11 +58,11 @@ const styles = StyleSheet.create({
         borderColor:colors.borderColor,
         paddingHorizontal:10,
         borderRadius:15,
-        elevation:1,
+        // elevation:1,
         backgroundColor:colors.background.primary,
         flexDirection:'row',
         alignItems:'center',
-        height:40,
+        height:height * 0.05,
     
 
     },
@@ -62,5 +71,6 @@ const styles = StyleSheet.create({
         marginLeft:5,
         color:"#000"
 
-    }
+    },
+   
 })
