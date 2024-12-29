@@ -1,23 +1,20 @@
 export const colors = {
-    background: {
-      primary: '#FFFFFF', // White
-      secondary: '#F5F5F5', // Light gray
-      accent: '#E8F0FE', // Light blue
-    },
+    background: '#fff',
     text: {
-      primary: '#000000', // Black
-      secondary: '#4A4A4A', // Dark gray
-      accent: '#1A73E8', // Blue
+      primary: '#000000', 
+      secondary: '#C0C0C0', 
+      accent: '#1A73E8', 
     },
-    border: {
-      primary: '#DADCE0', // Gray
-      secondary: '#CCCCCC', // Light gray
-      accent: '#1A73E8', // Blue
-    },
+    border: '#C0C0C0',
     button: {
-      primary: '#1A73E8', // Blue
-      secondary: '#E8F0FE', // Light blue
-      danger: '#D93025', // Red
+      blue: '#0000FF',
+      secondary: '#E8F0FE', 
+      danger: '#D93025', 
+      green: '#00C000'
     },
-    borderColor:'#bebebe'
+    color:{
+      black: '#000000',
+      gray: '#C0C0C0',
+      white: '#fff'
+    }
   };

@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "react": "18.2.0",
-    "react-native": "0.73.11",
+    "react-native": "^0.73.11",
     "react-native-collapsible": "^1.6.2",
+    "react-native-modal": "^13.0.1",
+    "react-native-modal-dropdown": "^1.0.2",
     "react-native-vector-icons": "^10.2.0"
   },
   "devDependencies": {

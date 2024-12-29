@@ -3,7 +3,7 @@ export const CelebritiesData = [
     id: '1',
     name: 'Leonardo DiCaprio',
     image: 'https://cdn.britannica.com/65/227665-050-D74A477E/American-actor-Leonardo-DiCaprio-2016.jpg',
-    age: "49 Years",
+    dob: "1974-11-11",
     gender: 'Male',
     country: 'USA',
     description:
@@ -13,7 +13,7 @@ export const CelebritiesData = [
     id: '2',
     name: 'Emma Watson',
     image: 'https://cdn.britannica.com/29/215029-050-84AA8F39/British-actress-Emma-Watson-2017.jpg',
-    age: "34 Years",
+    dob: "1990-04-15",
     gender: 'Female',
     country: 'UK',
     description:
@@ -23,7 +23,7 @@ export const CelebritiesData = [
     id: '3',
     name: 'Chris Hemsworth',
     image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTR54Gn7zLCZkGisA5zycM8RcTZ4eDgEHnbRw&s',
-    age: "41 Years",
+    dob: "1983-08-11",
     gender: 'Male',
     country: 'Australia',
     description:
@@ -33,7 +33,7 @@ export const CelebritiesData = [
     id: '4',
     name: 'Scarlett Johansson',
     image: 'https://i.guim.co.uk/img/media/f9b3449b0311a387b19372e98fb778c8991f13e7/0_13_4000_2400/master/4000.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=7f12379a4c51f1975716f8e905092220',
-    age: "39 Years",
+    dob: "1984-11-22",
     gender: 'Female',
     country: 'USA',
     description:
@@ -43,7 +43,7 @@ export const CelebritiesData = [
     id: '5',
     name: 'Dwayne Johnson',
     image: 'https://cdn.britannica.com/36/147936-050-8E84B614/Dwayne-Johnson.jpg',
-    age: "52 Years",
+    dob: "1972-05-02",
     gender: 'Male',
     country: 'USA',
     description:
@@ -53,7 +53,7 @@ export const CelebritiesData = [
     id: '6',
     name: 'Priyanka Chopra',
     image: 'https://cdn.britannica.com/82/220482-050-17843B41/Priyanka-Chopra-2020.jpg',
-    age: "41 Years",
+    dob: "1982-07-18",
     gender: 'Female',
     country: 'India',
     description:
@@ -63,7 +63,7 @@ export const CelebritiesData = [
     id: '7',
     name: 'Robert Downey Jr.',
     image: 'https://cdn.britannica.com/99/254199-050-98CF4E04/Robert-Downey-JR-UK-premier-Oppenheimer-movie-July-2023.jpg',
-    age: "59 Years",
+    dob: "1965-04-04",
     gender: 'Male',
     country: 'USA',
     description:
@@ -73,7 +73,7 @@ export const CelebritiesData = [
     id: '8',
     name: 'Zendaya',
     image: 'https://ethnicelebs.com/wp-content/uploads/2010/12/Zendaya-Coleman_small.jpg',
-    age: "27 Years",
+    dob: "1996-09-01",
     gender: 'Female',
     country: 'USA',
     description:
@@ -83,7 +83,7 @@ export const CelebritiesData = [
     id: '9',
     name: 'Tom Cruise',
     image: 'https://upload.wikimedia.org/wikipedia/commons/9/98/Tom_Cruise_%2834450932580%29.jpg',
-    age: "61 Years",
+    dob: "1962-07-03",
     gender: 'Male',
     country: 'USA',
     description:
@@ -93,7 +93,7 @@ export const CelebritiesData = [
     id: '10',
     name: 'Deepika Padukone',
     image: 'https://i.pinimg.com/564x/ee/06/73/ee067320595aa65b3b9a2b4f97eab97d.jpg',
-    age: "38 Years",
+    dob: "1986-01-05",
     gender: 'Female',
     country: 'India',
     description:

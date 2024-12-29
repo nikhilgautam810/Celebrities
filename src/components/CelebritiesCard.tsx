@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { Image, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, View, Pressable, Dimensions } from 'react-native'
+import { Image, StyleSheet, Text, TextInput, View, Pressable, Dimensions } from 'react-native'
 import { colors } from '../components/constants'
 import VectorIcons from '../components/VectorIcons'
 import Collapsible from 'react-native-collapsible';
-import { CelebritiesData } from '../Data/CelebritiesData';
 const { width, height } = Dimensions.get('window');
 
 
@@ -11,7 +10,7 @@ type Celebrity = {
     id: string;
     name: string;
     image: string;
-    age: string;
+    dob: string;
     gender: string;
     country: string;
     description: string;
@@ -19,37 +18,48 @@ type Celebrity = {
 let imageHeight = height * 0.06;
 let imageWidth = width * 0.13;
 
-const CelebritiesCard = ({ item, OnSave }: { item: any; OnSave: (updatedItem: any) => void }) => {
+const CelebritiesCard = ({ item, onSave, onDelete }: { item: any; onSave: (updatedItem: any) => void; onDelete: (id: string) => void; }) => {
 
     const [expanded, setExpanded] = React.useState(true);
     const [isEditing, setIsEditing] = React.useState(false);
     const [editedData, setEditedData] = React.useState<Celebrity>({ ...item });
-    
+    const [dropdownVisible, setDropdownVisible] = React.useState(false);
+
+
 
     const ShowMore = () => {
         setExpanded(!expanded);
         if (isEditing) {
             setIsEditing(false);
         }
+        setDropdownVisible(false);
     };
 
     const Edit = () => {
         setIsEditing(!isEditing);
     };
 
-    const Delete = (id: string) => {
-        setEditedData((prev) => {
-            return prev.filter((celeb) => celeb.id !== id);  
-        });
+    const Delete = () => {
+        console.log("Delete function called");
+        onDelete(item.id);
     };
-    
+
 
     const handleSave = () => {
-        OnSave(editedData);
+        onSave(editedData);
         setIsEditing(false);
+        setDropdownVisible(false);
     };
     const CloseEditMode = () => {
         setIsEditing(!isEditing);
+        setDropdownVisible(false);
+    }
+
+    const calculateAge = (dob: string) =>{
+        const birthDay = new Date(dob);
+        const todayDate = new Date();
+        var age = todayDate.getFullYear() - birthDay.getFullYear();
+        return age;
     }
 
     return (
@@ -63,7 +73,7 @@ const CelebritiesCard = ({ item, OnSave }: { item: any; OnSave: (updatedItem: an
                                 <TextInput
                                     style={styles.nameTextInput}
                                     value={editedData.name}
-                                    onChangeText={(text)=> setEditedData({...editedData, name: text})}
+                                    onChangeText={(text) => setEditedData({ ...editedData, name: text })}
                                 />
                             </View>
                         ) : (
@@ -76,7 +86,7 @@ const CelebritiesCard = ({ item, OnSave }: { item: any; OnSave: (updatedItem: an
                         type="Entypo"
                         name={expanded ? 'chevron-thin-down' : 'chevron-thin-up'}
                         size={18}
-                        color="#bebebe" />
+                        color={colors.color.gray} />
                 </View>
 
             </View>
@@ -89,12 +99,12 @@ const CelebritiesCard = ({ item, OnSave }: { item: any; OnSave: (updatedItem: an
                                 <View style={styles.textInputView}>
                                     <TextInput
                                         style={styles.detailsTextInput}
-                                        value={editedData.age}
-                                        onChangeText={(text)=> setEditedData({...editedData, age: text})}
+                                        value={editedData.dob}
+                                        onChangeText={(text) => setEditedData({ ...editedData, dob: text })}
                                     />
                                 </View>
                             ) : (
-                                <Text style={styles.info}>{editedData.age}</Text>
+                                <Text style={styles.info}>{calculateAge(editedData.dob)} Years</Text>
                             )
                         }
                     </View>
@@ -102,17 +112,44 @@ const CelebritiesCard = ({ item, OnSave }: { item: any; OnSave: (updatedItem: an
                         <Text style={styles.infoTxt}>Gender</Text>
                         {
                             isEditing ? (
-                                <View style={styles.textInputView}>
-                                    <TextInput
-                                        style={styles.detailsTextInput}
-                                        value={editedData.gender}
-                                        onChangeText={(text)=> setEditedData({...editedData, gender: text})}
-                                    />
+                                <View style={[styles.textInputView, {zIndex: 100}]}>
+                                    <Pressable
+                                        style={styles.genderField}
+                                        onPress={() => setDropdownVisible(!dropdownVisible)} 
+                                    >
+                                        <Text style={styles.info}>
+                                            {editedData.gender || 'Select Gender'}
+                                        </Text>
+                                        <VectorIcons
+                                            type="Entypo"
+                                            name={dropdownVisible ? 'chevron-thin-up' : 'chevron-thin-down'}
+                                            size={14}
+                                            color={colors.color.gray}
+                                        />
+                                    </Pressable>
+                                    {dropdownVisible && (
+                                        <View style={styles.dropdown}>
+                                            {['Male', 'Female', 'Other'].map((option) => (
+                                                <Pressable
+                                                    key={option}
+                                                    style={styles.dropdownItem}
+                                                    onPress={() => {
+                                                        setEditedData({ ...editedData, gender: option });
+                                                        setDropdownVisible(false); 
+                                                    }}
+                                                >
+                                                    <Text style={styles.info}>{option}</Text>
+                                                </Pressable>
+                                            ))}
+                                        </View>
+                                    )}
                                 </View>
                             ) : (
                                 <Text style={styles.info}>{editedData.gender}</Text>
                             )
                         }
+
+
                     </View>
                     <View style={styles.infoView}>
                         <Text style={styles.infoTxt}>Country</Text>
@@ -122,7 +159,7 @@ const CelebritiesCard = ({ item, OnSave }: { item: any; OnSave: (updatedItem: an
                                     <TextInput
                                         style={styles.detailsTextInput}
                                         value={editedData.country}
-                                        onChangeText={(text)=> setEditedData({...editedData, country: text})}
+                                        onChangeText={(text) => setEditedData({ ...editedData, country: text })}
                                     />
                                 </View>
                             ) : (
@@ -142,8 +179,8 @@ const CelebritiesCard = ({ item, OnSave }: { item: any; OnSave: (updatedItem: an
                                     multiline={true}
                                     numberOfLines={5}
                                     placeholder='Write your'
-                                    onChangeText={(text)=> setEditedData({...editedData, description: text})}
-                                    />
+                                    onChangeText={(text) => setEditedData({ ...editedData, description: text })}
+                                />
                             </View>
                         ) : (
                             <Text style={styles.descriptionTxt}>{editedData.description}</Text>
@@ -161,27 +198,27 @@ const CelebritiesCard = ({ item, OnSave }: { item: any; OnSave: (updatedItem: an
                                     size={24}
                                     color={colors.button.danger} />
                             </Pressable>
-                                <Pressable style={styles.deleteBtn} onPress={() => handleSave()}>
+                                <Pressable style={styles.saveBtn} onPress={() => handleSave()}>
                                     <VectorIcons
                                         type="Octicons"
                                         name="check-circle"
                                         size={22}
-                                        color={colors.button.primary} />
+                                        color={colors.button.green} />
                                 </Pressable></>
                         ) : (
-                            <><Pressable style={styles.editBtn} onPress={() => Delete}>
+                            <><Pressable style={styles.editBtn} onPress={() => Delete()}>
                                 <VectorIcons
                                     type="AntDesign"
                                     name="delete"
                                     size={22}
                                     color={'#FF0000'} />
                             </Pressable>
-                                <Pressable style={styles.deleteBtn} onPress={() => Edit()}>
+                                <Pressable style={styles.editBtn} onPress={() => Edit()}>
                                     <VectorIcons
                                         type="Octicons"
                                         name="pencil"
                                         size={22}
-                                        color={'#00C000'} />
+                                        color={colors.button.blue} />
                                 </Pressable></>
                         )
                     }
@@ -197,23 +234,21 @@ export default CelebritiesCard;
 const styles = StyleSheet.create({
     celebsView: {
         borderWidth: 1,
-        borderColor: "#C0C0C0",
+        borderColor: colors.border,
         alignItems: 'center',
         paddingVertical: 10,
         paddingHorizontal: 15,
         marginVertical: 10,
         marginHorizontal: 15,
         borderRadius: 10,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        backgroundColor: colors.background
     },
     celebsListView: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        // backgroundColor:'#ccc',
         width: '100%',
         alignItems: 'center',
-
-
     },
     celebsViewImageName: {
         alignItems: 'center',
@@ -224,24 +259,21 @@ const styles = StyleSheet.create({
         width: imageWidth,
         borderRadius: 50,
         borderWidth: 1,
-        borderColor: colors.border.primary,
-        // borderColor:"#C0C0C0",
+        borderColor: colors.border,
         marginRight: 15,
-        resizeMode: 'cover'
+        resizeMode: 'stretch'
 
     },
     celebNameTxt: {
-        color: '#000',
-        fontWeight: '500',
-        fontSize: 19,
+        color: colors.text.primary,
+        fontWeight: '400',
+        fontSize: 17,
     },
     dropDownBtn: {
         padding: 5
     },
     celebsInfo: {
-        // position:'absolute',
-        // top:0,
-
+        paddingHorizontal:8
     },
     ageGenderCountryView: {
         flexDirection: 'row',
@@ -256,8 +288,7 @@ const styles = StyleSheet.create({
     },
     infoTxt: {
         fontSize: 14,
-        color: "#C0C0C0",
-        // marginLeft: 5,
+        color: colors.text.secondary,
         marginBottom: 5
 
     },
@@ -278,7 +309,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '20%',
         margin: 5,
-        // backgroundColor:'#ccc',
         justifyContent: 'space-between',
         alignItems: 'center'
     },
@@ -287,15 +317,14 @@ const styles = StyleSheet.create({
     },
     textInputView: {
         borderWidth: 1,
-        borderColor: '#C0C0C0',
+        borderColor: colors.border,
         borderRadius: 10,
-        alignItems: 'center'
+        alignItems: 'center',
 
     },
     nameTextInput: {
         height: height / 30,
-        // maxWidth: width/2,
-        color: '#000',
+        color: colors.text.primary,
         margin: 1,
         fontSize: 14,
         padding: 0,
@@ -305,7 +334,7 @@ const styles = StyleSheet.create({
     detailsTextInput: {
         height: height / 35,
         width: width / 4.5,
-        color: '#000',
+        color: colors.text.primary,
         margin: 1,
         fontSize: 14,
         padding: 0,
@@ -314,12 +343,55 @@ const styles = StyleSheet.create({
     descriptionTextInput: {
         height: height / 12,
         color: colors.text.primary,
-        // backgroundColor:'#ccc',
         padding: 0,
         fontSize: 14,
         paddingHorizontal: 10
 
     },
+    genderField: {
+        height: height / 35,
+        width: width / 4.5,
+        color: colors.text.primary,
+        margin: 1,
+        fontSize: 14,
+        padding: 0,
+        paddingHorizontal: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        backgroundColor: colors.background,
+        borderRadius: 10,
+    },
+    genderText: {
+        color: '#000',
+        fontSize: 16,
+    },
+    dropdown: {
+        position: 'absolute',
+        top: 30,
+        width: '100%',
+        backgroundColor: colors.background,
+        borderWidth: 0.6,
+        borderColor: '#ccc',
+        borderRadius: 10,
+        elevation: 10,
+        zIndex: 100
+        },
+    dropdownItem: {
+        padding: 10,
+        borderBottomWidth: 0.5,
+        borderBottomColor: colors.border,
+    },
+    dropdownText: {
+        fontSize: 16,
+        color: colors.text.primary,
+    },
+    genderDropDownBtn: {
+        position: 'absolute',
+        right: 5,
+        top: 5
+    }
+
 
 })
 
